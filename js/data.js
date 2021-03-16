@@ -1,27 +1,12 @@
-import gallery from "./gallery-items.js";
- 
+import { galleryList, modalRef, modalImgRef, btnRef, overlayRef } from './dom.js';
+import { createGalleryCardsMarkUp } from './fn-create.js';
 
-const galleryList = document.querySelector('.js-gallery');
-const modalRef = document.querySelector('.js-lightbox');
-const modalImgRef = document.querySelector('.lightbox__image');
-const btnRef = document.querySelector('.lightbox__button');
-const overlayRef = document.querySelector('.lightbox__overlay');
-
-const createGalleryCardsMarkUp = gallery.map(({ original, preview, description }) => {
-    return `
-    <li class="gallery__item">
-        <a class="gallery__link" href="${original}">
-        <img class="gallery__image" src="${preview}"
-          data-source="${original}" alt="${description}" />
-      </a>
-    </li>` });
-
-    console.log(createGalleryCardsMarkUp);
 galleryList.insertAdjacentHTML('afterbegin', createGalleryCardsMarkUp.join(''));
 
 galleryList.addEventListener('click', onOpenModal);
 btnRef.addEventListener('click', isCloseModal);
 overlayRef.addEventListener('click', isCloseModal);
+
 
 function onOpenModal(e)  {
   e.preventDefault();
@@ -31,11 +16,14 @@ function onOpenModal(e)  {
   }
   modalRef.classList.add('is-open');
   modalImgRef.src = e.target.dataset.source;
-  modalImgRef.alt = e.target.dataset.alt;
+  modalImgRef.alt = e.target.alt;
 }
 
 function isCloseModal () {
   modalRef.classList.remove('is-open');
+  modalImgRef.removeAttribute('src');
+  modalImgRef.removeAttribute('alt');
+
 }
 
 window.addEventListener('keydown', (e) => {
